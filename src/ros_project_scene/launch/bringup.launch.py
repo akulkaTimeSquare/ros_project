@@ -8,6 +8,7 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Comm
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
+
 def generate_launch_description():
     pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
     pkg_lab = get_package_share_directory('ros_project_scene')
@@ -68,6 +69,27 @@ def generate_launch_description():
         arguments=["velocity_controller"],
         output="screen"
     )
+
+    controller = Node(
+        package='ros_project_scene',
+        executable='controller',
+        name='controller',
+        output='screen',
+    )
+
+    sensor_data_proc = Node(
+        package='ros_project_scene',
+        executable='sensor_data_proc',
+        name='sensor_data_proc',
+        output='screen',
+    )
+
+    lidar_data_proc = Node(
+        package='ros_project_scene',
+        executable='lidar_data_proc',
+        name='lidar_data_proc',
+        output='screen',
+    )
     
     return LaunchDescription([
         gz_sim,
@@ -81,4 +103,7 @@ def generate_launch_description():
         robot_state_publisher,
         rviz,
         spawn_controller,
+        controller,
+        # sensor_data_proc,
+        # lidar_data_proc,
     ])

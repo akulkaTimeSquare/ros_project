@@ -42,7 +42,7 @@
             </geometry>
             <material name="white"/>
         </visual>
-        <xacro:inertial_box mass="1" x="0.2" y="0.6" z="0.6">
+        <xacro:inertial_box mass="2" x="0.2" y="0.6" z="0.6">
             <origin xyz="0 0 0.2" rpy="0 ${pi/2} 0"/>
         </xacro:inertial_box>
         <collision>
@@ -104,11 +104,10 @@
         </inertial>
     </link>
 
-    <joint name="camera_joint" type="continuous">
+    <joint name="camera_joint" type="fixed">
         <origin xyz="0.275 0 0.37" rpy="0 0 0"/>
         <parent link="base_link"/>
         <child link="camera_link"/>
-        <axis xyz="0 0 1"/>
     </joint>
 
     <gazebo reference="camera_link">
@@ -162,11 +161,10 @@
         </collision>
     </link>
     
-    <joint name="lidar_joint" type="continuous">
+    <joint name="lidar_joint" type="fixed">
         <origin xyz="0.275 0 0.325" rpy="0 0 0"/>
         <child link="lidar_link"/>
         <parent link="base_link"/>
-        <axis xyz="0 0 1"/>
     </joint>
 
     <gazebo reference="lidar_link">
