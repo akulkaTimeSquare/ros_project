@@ -105,8 +105,8 @@
     </link>
 
     <joint name="camera_joint" type="fixed">
-        <origin xyz="0.275 0 0.37" rpy="0 0 0"/>
-        <parent link="base_link"/>
+        <origin xyz="0.01 0 0.06" rpy="0 0.5 0"/>
+        <parent link="lidar_link"/>
         <child link="camera_link"/>
     </joint>
 
@@ -116,7 +116,7 @@
         <sensor name="camera" type="camera">
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>true</visualize>
-            <update_rate>10</update_rate>
+            <update_rate>15</update_rate>
             <camera>
                 <camera_info_topic>camera/camera_info</camera_info_topic>
                 <horizontal_fov>1.089</horizontal_fov>

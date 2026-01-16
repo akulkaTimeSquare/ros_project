@@ -48,7 +48,7 @@ def generate_launch_description():
     spawn = Node(
         package='ros_gz_sim', 
         executable='create', 
-        arguments=[ '-name', 'diff_drive', '-topic', 'robot_description', '-x', '1', '-y', '1', '-z', '2'], 
+        arguments=[ '-name', 'diff_drive', '-topic', 'robot_description', '-x', '1', '-y', '1', '-z', '1'], 
         output='screen'
     )
 
@@ -77,17 +77,10 @@ def generate_launch_description():
         output='screen',
     )
 
-    sensor_data_proc = Node(
+    data_proc = Node(
         package='ros_project_scene',
-        executable='sensor_data_proc',
-        name='sensor_data_proc',
-        output='screen',
-    )
-
-    lidar_data_proc = Node(
-        package='ros_project_scene',
-        executable='lidar_data_proc',
-        name='lidar_data_proc',
+        executable='data_proc',
+        name='data_proc',
         output='screen',
     )
     
@@ -104,6 +97,5 @@ def generate_launch_description():
         rviz,
         spawn_controller,
         controller,
-        # sensor_data_proc,
-        # lidar_data_proc,
+        data_proc,
     ])

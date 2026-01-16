@@ -30,10 +30,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'scene_publisher = ros_project_scene.scene_publisher:main',
-            'sensor_data_proc = ros_project_scene.sensor_data_proc:main',
-            'lidar_data_proc = ros_project_scene.lidar_data_proc:main',
             'controller = ros_project_scene.controller:main',
+            'data_proc = ros_project_scene.data_proc:main',
         ],
     },
 )
