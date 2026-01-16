@@ -13,8 +13,14 @@ import numpy as np
 class DataProc(Node):
     def __init__(self):
         super().__init__('data_proc')
-        self.safe_dist = 1.0
         self.max_speed = 0.5
+        self.stab_k = 1.5
+
+        self.turn_speed = 2.0
+        self.forward_speed = 0.3
+        
+        self.safe_dist_front = 0.75
+        self.safe_dist_sides = 0.5
 
         self.lidar_sub = self.create_subscription(
             LaserScan,
@@ -37,7 +43,7 @@ class DataProc(Node):
         self.front = None
 
         self.bridge = CvBridge()
-        self.edge_ratio_thresh = 0.001
+        self.edge_ratio_thresh = 0.0025
         self.low_obstacle_fl = None
         self.low_obstacle_right = None
 
@@ -55,7 +61,7 @@ class DataProc(Node):
         # right
         frame_right = frame[int(h * 0.3):h, 0:int(w * 0.3)]
         gray_right = cv2.cvtColor(frame_right, cv2.COLOR_BGR2GRAY)
-        edges_right = cv2.Canny(gray_right, 35, 200)
+        edges_right = cv2.Canny(gray_right, 50, 200)
         ratio_right = np.count_nonzero(edges_right) / edges_right.size
         self.low_obstacle_right = ratio_right > self.edge_ratio_thresh
 
@@ -77,6 +83,7 @@ class DataProc(Node):
     def control_loop(self):
         if self.low_obstacle_fl is None or self.low_obstacle_right is None:
             return
+        
         if self.left is None or self.right is None or self.front is None:
             return
         
@@ -85,21 +92,25 @@ class DataProc(Node):
 
         # camera control
         if self.low_obstacle_fl:
-            linear = 0.0
-            angular = 1.5
+            linear = self.forward_speed / 2
+            angular = self.turn_speed
+        
+        elif self.low_obstacle_right:
+            linear = self.forward_speed / 2
+            angular = -self.turn_speed
 
         # lidar control
-        elif self.front < self.safe_dist or self.left < 0.5:
-            linear = 0.05
-            angular = 2.0
+        elif self.front < self.safe_dist_front or self.left < self.safe_dist_sides:
+            linear = self.forward_speed
+            angular = self.turn_speed
 
-        elif self.right < 0.5:
-            linear = 0.05
-            angular = -2.0
+        elif self.right < self.safe_dist_sides:
+            linear = self.forward_speed
+            angular = -self.turn_speed
 
         else:
             linear = self.max_speed
-            angular = (self.right - self.left) * 1.5
+            angular = (self.right - self.left) * self.stab_k
 
         cmd = Twist()
         cmd.linear.x = linear
