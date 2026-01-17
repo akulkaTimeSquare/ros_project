@@ -75,6 +75,7 @@ def generate_launch_description():
         executable='controller',
         name='controller',
         output='screen',
+        parameters=[{'use_sim_time': True}]
     )
 
     data_proc = Node(
@@ -82,6 +83,7 @@ def generate_launch_description():
         executable='data_proc',
         name='data_proc',
         output='screen',
+        parameters=[{'use_sim_time': True}]
     )
     
     return LaunchDescription([
